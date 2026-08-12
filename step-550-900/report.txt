@@ -1,0 +1,403 @@
+================================================================================
+ vLLM BENCHMARK REPORT
+================================================================================
+ Run ID            : step-550-900
+ Mode              : step
+ Report            : по свежему прогону
+ Model             : Qwen/Qwen3.6-35B-A3B-FP8
+ vLLM version      : 0.26.0
+ Started at        : 2026-08-12T09:20:08.158289443Z
+ Load started at   : 2026-08-12T09:20:12.746Z
+ Ended at          : 2026-08-12T11:00:29.373285937Z
+ Generated at      : 2026-08-12T11:00:30.381894559Z
+
+ Load generator
+   Engine                    : штатная JMeter Thread Group + Constant Throughput Timer (all active threads in current thread group)
+   Threads (total)           : 36252  (сумма по ступеням; RPM / 60 x 300 s x 1.25 на ступень)
+   Dataset                   : 10 промптов, sha256 1d6d533769572a00...
+   Request                   : max_tokens=10000, ignore_eos=false, temperature=0.0, top_p=1.0, stream=false
+   E2E SLA threshold         : 360.0 s  (scoring.e2eSlaSec)
+
+ Metric names resolved from vLLM
+   generationTokens          : vllm:generation_tokens_total
+   itl                       : vllm:inter_token_latency_seconds
+   kvCacheUsage              : vllm:kv_cache_usage_perc
+   promptTokens              : vllm:prompt_tokens_total
+   queueWaiting              : vllm:num_requests_waiting
+   tpot                      : vllm:request_time_per_output_token_seconds
+   ttft                      : vllm:time_to_first_token_seconds
+
+ Aggregation
+   Histogram quantile        : p95
+   Sub-window                : 30 s  (влияет на p95 avg/max и на Throughput Max)
+   Scrape interval           : 5 s  (ограничивает Queue Max и KV Cache Max)
+
+--------------------------------------------------------------------------------
+ STAGE 1 — target 550 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-12T09:26:28.746Z .. 2026-08-12T09:31:28.746Z  (300 s)
+ Ramp              : 376 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 3438, такт 375.1 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 2.4 RPM   (target 550 RPM, -99.6 %)
+   Total Requests            : 1297
+   Successful                : 12
+   Threads (peak observed)   : 4354 из 3438   ВНИМАНИЕ: заняты все потоки ступени, темп ограничен генератором
+   Errors                    : 1285  (99.07 %)
+   E2E Latency Avg           : 590.32 s
+   E2E Latency p95           : 599.15 s
+   E2E Latency Min           : 579.27 s
+   E2E Latency Max           : 599.15 s   (истинный максимум, по отдельным наблюдениям)
+   Error reasons:
+     1285 x Non HTTP response code: java.net.SocketTimeoutException Test failed: text expected to contain /"choices"/
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 99.9 %
+   KV Cache Max              : 100.0 %   (максимум среди снятых значений)
+   Queue Max                 : 2727   (максимум среди снятых значений)
+   TTFT p95 (avg)            : 349.653 s   (подокно 30 s)
+   TTFT p95 (max)            : 615.002 s   (подокно 30 s)
+   TPOT p95 (avg)            : 0.160 s   (подокно 30 s)
+   TPOT p95 (max)            : 0.194 s   (подокно 30 s)
+   ITL p95 (avg)             : 0.173 s   (подокно 30 s)
+   ITL p95 (max)             : 0.190 s   (подокно 30 s)
+   Prompt Throughput Avg     : 83.3 tok/s
+   Prompt Throughput Max     : 228.6 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 7354.1 tok/s
+   Generation Throughput Max : 9314.9 tok/s   (подокно 30 s)
+
+ Score: 0 / 100
+   -50  Фактический RPM 2.4 против целевых 550 (недобор 99.6 %)
+   -30  Ошибок 1285 из 1297 (99.07 %)
+   -25  E2E p95 599.1 с при пороге 360.0 с
+   -15  Очередь доходила до 2727 запросов
+   -15  Утилизация KV-кэша доходила до 100.0 %
+   -15  TTFT p95 (avg) 349.65 с
+
+--------------------------------------------------------------------------------
+ STAGE 2 — target 600 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-12T09:37:43.746Z .. 2026-08-12T09:42:43.746Z  (300 s)
+ Ramp              : 375 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 3750, такт 375.0 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 51.6 RPM   (target 600 RPM, -91.4 %)
+   Total Requests            : 749
+   Successful                : 258
+   Threads (peak observed)   : 4815 из 3750   ВНИМАНИЕ: заняты все потоки ступени, темп ограничен генератором
+   Errors                    : 491  (65.55 %)
+   E2E Latency Avg           : 575.07 s
+   E2E Latency p95           : 597.61 s
+   E2E Latency Min           : 530.10 s
+   E2E Latency Max           : 600.08 s   (истинный максимум, по отдельным наблюдениям)
+   Error reasons:
+     491 x Non HTTP response code: java.net.SocketTimeoutException Test failed: text expected to contain /"choices"/
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 99.9 %
+   KV Cache Max              : 100.0 %   (максимум среди снятых значений)
+   Queue Max                 : 3358   (максимум среди снятых значений)
+   TTFT p95 (avg)            : 0.005 s   (подокно 30 s)
+   TTFT p95 (max)            : 0.005 s   (подокно 30 s)
+   TPOT p95 (avg)            : 0.059 s   (подокно 30 s)
+   TPOT p95 (max)            : 0.147 s   (подокно 30 s)
+   ITL p95 (avg)             : 0.191 s   (подокно 30 s)
+   ITL p95 (max)             : 0.271 s   (подокно 30 s)
+   Prompt Throughput Avg     : 173.1 tok/s
+   Prompt Throughput Max     : 504.4 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 7809.4 tok/s
+   Generation Throughput Max : 9869.6 tok/s   (подокно 30 s)
+
+ Score: 0 / 100
+   -50  Фактический RPM 51.6 против целевых 600 (недобор 91.4 %)
+   -30  Ошибок 491 из 749 (65.55 %)
+   -25  E2E p95 597.6 с при пороге 360.0 с
+   -15  Очередь доходила до 3358 запросов
+   -15  Утилизация KV-кэша доходила до 100.0 %
+
+--------------------------------------------------------------------------------
+ STAGE 3 — target 650 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-12T09:48:59.746Z .. 2026-08-12T09:53:59.746Z  (300 s)
+ Ramp              : 376 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 4063, такт 375.0 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 54.2 RPM   (target 650 RPM, -91.7 %)
+   Total Requests            : 837
+   Successful                : 271
+   Threads (peak observed)   : 5194 из 4063   ВНИМАНИЕ: заняты все потоки ступени, темп ограничен генератором
+   Errors                    : 566  (67.62 %)
+   E2E Latency Avg           : 571.60 s
+   E2E Latency p95           : 597.79 s
+   E2E Latency Min           : 517.34 s
+   E2E Latency Max           : 600.04 s   (истинный максимум, по отдельным наблюдениям)
+   Error reasons:
+     566 x Non HTTP response code: java.net.SocketTimeoutException Test failed: text expected to contain /"choices"/
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 99.8 %
+   KV Cache Max              : 100.0 %   (максимум среди снятых значений)
+   Queue Max                 : 4109   (максимум среди снятых значений)
+   TTFT p95 (avg)            : 0.005 s   (подокно 30 s)
+   TTFT p95 (max)            : 0.005 s   (подокно 30 s)
+   TPOT p95 (avg)            : 0.148 s   (подокно 30 s)
+   TPOT p95 (max)            : 0.148 s   (подокно 30 s)
+   ITL p95 (avg)             : 0.189 s   (подокно 30 s)
+   ITL p95 (max)             : 0.290 s   (подокно 30 s)
+   Prompt Throughput Avg     : 193.0 tok/s
+   Prompt Throughput Max     : 470.6 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 7126.6 tok/s
+   Generation Throughput Max : 8757.0 tok/s   (подокно 30 s)
+
+ Score: 0 / 100
+   -50  Фактический RPM 54.2 против целевых 650 (недобор 91.7 %)
+   -30  Ошибок 566 из 837 (67.62 %)
+   -25  E2E p95 597.8 с при пороге 360.0 с
+   -15  Очередь доходила до 4109 запросов
+   -15  Утилизация KV-кэша доходила до 100.0 %
+
+--------------------------------------------------------------------------------
+ STAGE 4 — target 700 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-12T10:00:14.746Z .. 2026-08-12T10:05:14.746Z  (300 s)
+ Ramp              : 375 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 4375, такт 375.0 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 46.0 RPM   (target 700 RPM, -93.4 %)
+   Total Requests            : 885
+   Successful                : 230
+   Threads (peak observed)   : 5562 из 4375   ВНИМАНИЕ: заняты все потоки ступени, темп ограничен генератором
+   Errors                    : 655  (74.01 %)
+   E2E Latency Avg           : 575.52 s
+   E2E Latency p95           : 596.87 s
+   E2E Latency Min           : 532.20 s
+   E2E Latency Max           : 600.06 s   (истинный максимум, по отдельным наблюдениям)
+   Error reasons:
+     655 x Non HTTP response code: java.net.SocketTimeoutException Test failed: text expected to contain /"choices"/
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 99.8 %
+   KV Cache Max              : 100.0 %   (максимум среди снятых значений)
+   Queue Max                 : 4495   (максимум среди снятых значений)
+   TTFT p95 (avg)            : 0.005 s   (подокно 30 s)
+   TTFT p95 (max)            : 0.005 s   (подокно 30 s)
+   TPOT p95 (avg)            : 0.148 s   (подокно 30 s)
+   TPOT p95 (max)            : 0.148 s   (подокно 30 s)
+   ITL p95 (avg)             : 0.200 s   (подокно 30 s)
+   ITL p95 (max)             : 0.282 s   (подокно 30 s)
+   Prompt Throughput Avg     : 206.2 tok/s
+   Prompt Throughput Max     : 501.8 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 7346.6 tok/s
+   Generation Throughput Max : 8306.2 tok/s   (подокно 30 s)
+
+ Score: 0 / 100
+   -50  Фактический RPM 46.0 против целевых 700 (недобор 93.4 %)
+   -30  Ошибок 655 из 885 (74.01 %)
+   -25  E2E p95 596.9 с при пороге 360.0 с
+   -15  Очередь доходила до 4495 запросов
+   -15  Утилизация KV-кэша доходила до 100.0 %
+
+--------------------------------------------------------------------------------
+ STAGE 5 — target 750 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-12T10:11:30.746Z .. 2026-08-12T10:16:30.746Z  (300 s)
+ Ramp              : 376 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 4688, такт 375.0 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 67.4 RPM   (target 750 RPM, -91.0 %)
+   Total Requests            : 937
+   Successful                : 337
+   Threads (peak observed)   : 5953 из 4688   ВНИМАНИЕ: заняты все потоки ступени, темп ограничен генератором
+   Errors                    : 600  (64.03 %)
+   E2E Latency Avg           : 571.49 s
+   E2E Latency p95           : 598.03 s
+   E2E Latency Min           : 510.91 s
+   E2E Latency Max           : 599.76 s   (истинный максимум, по отдельным наблюдениям)
+   Error reasons:
+     600 x Non HTTP response code: java.net.SocketTimeoutException Test failed: text expected to contain /"choices"/
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 99.8 %
+   KV Cache Max              : 100.0 %   (максимум среди снятых значений)
+   Queue Max                 : 4869   (максимум среди снятых значений)
+   TTFT p95 (avg)            : 0.005 s   (подокно 30 s)
+   TTFT p95 (max)            : 0.005 s   (подокно 30 s)
+   TPOT p95 (avg)            : 0.148 s   (подокно 30 s)
+   TPOT p95 (max)            : 0.148 s   (подокно 30 s)
+   ITL p95 (avg)             : 0.193 s   (подокно 30 s)
+   ITL p95 (max)             : 0.284 s   (подокно 30 s)
+   Prompt Throughput Avg     : 218.3 tok/s
+   Prompt Throughput Max     : 526.2 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 7660.1 tok/s
+   Generation Throughput Max : 8768.8 tok/s   (подокно 30 s)
+
+ Score: 0 / 100
+   -50  Фактический RPM 67.4 против целевых 750 (недобор 91.0 %)
+   -30  Ошибок 600 из 937 (64.03 %)
+   -25  E2E p95 598.0 с при пороге 360.0 с
+   -15  Очередь доходила до 4869 запросов
+   -15  Утилизация KV-кэша доходила до 100.0 %
+
+--------------------------------------------------------------------------------
+ STAGE 6 — target 800 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-12T10:22:45.746Z .. 2026-08-12T10:27:45.746Z  (300 s)
+ Ramp              : 375 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 5000, такт 375.0 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 64.6 RPM   (target 800 RPM, -91.9 %)
+   Total Requests            : 998
+   Successful                : 323
+   Threads (peak observed)   : 6317 из 5000   ВНИМАНИЕ: заняты все потоки ступени, темп ограничен генератором
+   Errors                    : 675  (67.64 %)
+   E2E Latency Avg           : 571.21 s
+   E2E Latency p95           : 596.61 s
+   E2E Latency Min           : 519.13 s
+   E2E Latency Max           : 600.09 s   (истинный максимум, по отдельным наблюдениям)
+   Error reasons:
+     675 x Non HTTP response code: java.net.SocketTimeoutException Test failed: text expected to contain /"choices"/
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 99.8 %
+   KV Cache Max              : 100.0 %   (максимум среди снятых значений)
+   Queue Max                 : 5257   (максимум среди снятых значений)
+   TTFT p95 (avg)            : 0.005 s   (подокно 30 s)
+   TTFT p95 (max)            : 0.005 s   (подокно 30 s)
+   TPOT p95 (avg)            : 0.148 s   (подокно 30 s)
+   TPOT p95 (max)            : 0.148 s   (подокно 30 s)
+   ITL p95 (avg)             : 0.163 s   (подокно 30 s)
+   ITL p95 (max)             : 0.213 s   (подокно 30 s)
+   Prompt Throughput Avg     : 230.7 tok/s
+   Prompt Throughput Max     : 528.8 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 8118.0 tok/s
+   Generation Throughput Max : 9192.1 tok/s   (подокно 30 s)
+
+ Score: 0 / 100
+   -50  Фактический RPM 64.6 против целевых 800 (недобор 91.9 %)
+   -30  Ошибок 675 из 998 (67.64 %)
+   -25  E2E p95 596.6 с при пороге 360.0 с
+   -15  Очередь доходила до 5257 запросов
+   -15  Утилизация KV-кэша доходила до 100.0 %
+
+--------------------------------------------------------------------------------
+ STAGE 7 — target 850 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-12T10:34:01.746Z .. 2026-08-12T10:39:01.746Z  (300 s)
+ Ramp              : 376 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 5313, такт 375.0 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 68.6 RPM   (target 850 RPM, -91.9 %)
+   Total Requests            : 1086
+   Successful                : 343
+   Threads (peak observed)   : 6703 из 5313   ВНИМАНИЕ: заняты все потоки ступени, темп ограничен генератором
+   Errors                    : 743  (68.42 %)
+   E2E Latency Avg           : 571.55 s
+   E2E Latency p95           : 597.47 s
+   E2E Latency Min           : 510.41 s
+   E2E Latency Max           : 600.07 s   (истинный максимум, по отдельным наблюдениям)
+   Error reasons:
+     743 x Non HTTP response code: java.net.SocketTimeoutException Test failed: text expected to contain /"choices"/
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 99.8 %
+   KV Cache Max              : 100.0 %   (максимум среди снятых значений)
+   Queue Max                 : 5623   (максимум среди снятых значений)
+   TTFT p95 (avg)            : 0.005 s   (подокно 30 s)
+   TTFT p95 (max)            : 0.005 s   (подокно 30 s)
+   TPOT p95 (avg)            : 0.147 s   (подокно 30 s)
+   TPOT p95 (max)            : 0.148 s   (подокно 30 s)
+   ITL p95 (avg)             : 0.148 s   (подокно 30 s)
+   ITL p95 (max)             : 0.207 s   (подокно 30 s)
+   Prompt Throughput Avg     : 248.4 tok/s
+   Prompt Throughput Max     : 563.5 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 8332.2 tok/s
+   Generation Throughput Max : 9826.8 tok/s   (подокно 30 s)
+
+ Score: 0 / 100
+   -50  Фактический RPM 68.6 против целевых 850 (недобор 91.9 %)
+   -30  Ошибок 743 из 1086 (68.42 %)
+   -25  E2E p95 597.5 с при пороге 360.0 с
+   -15  Очередь доходила до 5623 запросов
+   -15  Утилизация KV-кэша доходила до 100.0 %
+
+--------------------------------------------------------------------------------
+ STAGE 8 — target 900 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-12T10:45:16.746Z .. 2026-08-12T10:50:16.746Z  (300 s)
+ Ramp              : 375 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 5625, такт 375.0 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 69.2 RPM   (target 900 RPM, -92.3 %)
+   Total Requests            : 1146
+   Successful                : 346
+   Threads (peak observed)   : 1334 из 5625
+   Errors                    : 800  (69.81 %)
+   E2E Latency Avg           : 572.40 s
+   E2E Latency p95           : 597.48 s
+   E2E Latency Min           : 521.79 s
+   E2E Latency Max           : 599.76 s   (истинный максимум, по отдельным наблюдениям)
+   Error reasons:
+     800 x Non HTTP response code: java.net.SocketTimeoutException Test failed: text expected to contain /"choices"/
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 99.8 %
+   KV Cache Max              : 100.0 %   (максимум среди снятых значений)
+   Queue Max                 : 6012   (максимум среди снятых значений)
+   TTFT p95 (avg)            : 0.005 s   (подокно 30 s)
+   TTFT p95 (max)            : 0.005 s   (подокно 30 s)
+   TPOT p95 (avg)            : 0.108 s   (подокно 30 s)
+   TPOT p95 (max)            : 0.140 s   (подокно 30 s)
+   ITL p95 (avg)             : 0.144 s   (подокно 30 s)
+   ITL p95 (max)             : 0.179 s   (подокно 30 s)
+   Prompt Throughput Avg     : 257.9 tok/s
+   Prompt Throughput Max     : 577.1 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 8492.1 tok/s
+   Generation Throughput Max : 9914.0 tok/s   (подокно 30 s)
+
+ Score: 0 / 100
+   -50  Фактический RPM 69.2 против целевых 900 (недобор 92.3 %)
+   -30  Ошибок 800 из 1146 (69.81 %)
+   -25  E2E p95 597.5 с при пороге 360.0 с
+   -15  Очередь доходила до 6012 запросов
+   -15  Утилизация KV-кэша доходила до 100.0 %
+
+--------------------------------------------------------------------------------
+ SUMMARY
+--------------------------------------------------------------------------------
+ Stage   Target RPM  Actual RPM   Errors     E2E p95  Queue Max   KV Max   Score
+ 1              550         2.4   99.07%      599.1s       2727   100.0%       0
+ 2              600        51.6   65.55%      597.6s       3358   100.0%       0
+ 3              650        54.2   67.62%      597.8s       4109   100.0%       0
+ 4              700        46.0   74.01%      596.9s       4495   100.0%       0
+ 5              750        67.4   64.03%      598.0s       4869   100.0%       0
+ 6              800        64.6   67.64%      596.6s       5257   100.0%       0
+ 7              850        68.6   68.42%      597.5s       5623   100.0%       0
+ 8              900        69.2   69.81%      597.5s       6012   100.0%       0
+
+--------------------------------------------------------------------------------
+ NOTES
+--------------------------------------------------------------------------------
+ - Все величины посчитаны только за окно удержания. Разгон не участвует нигде.
+ - С гистограмм снимается единственный квантиль p95. «p95 (max)» — худший наблюдённый участок
+   прогона, а не максимум отдельных наблюдений: последнего в бакетах не
+   существует. Значения зависят от подокна 30 s: на более коротком ряд шумнее
+   и его максимум выше. Разрешение p95 ограничено границами бакетов гистограммы.
+ - Queue Max и KV Cache Max — максимумы среди снятых значений. Всплеск короче
+   интервала скрейпа (5 s) в данных не существует.
+ - Throughput Max — максимум производной счётчика по подокну 30 s. На другом
+   подокне получится другое число, оба формально верны.
+ - TPOT и ITL — обе величины стадии decode, различаются способом усреднения:
+   TPOT взвешен по запросам, ITL — по токенам. Стадию prefill не отражает ни одна
+   из них, за неё отвечает TTFT.
+ - E2E Latency считается по успешным запросам: оборванный по таймауту запрос дал бы
+   не время отклика модели, а значение request.responseTimeoutSec.
+ - Пороги штрафов заданы константами Scoring и почти наверняка требуют настройки.
+   Пересчитать отчёт по уже собранным данным: LT_MODE=report LT_RUN_ID=<run>.
