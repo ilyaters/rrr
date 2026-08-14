@@ -1,0 +1,194 @@
+================================================================================
+ vLLM BENCHMARK REPORT
+================================================================================
+ Run ID            : step-250-400-FP8-slow-600
+ Mode              : step
+ Report            : по свежему прогону
+ Model             : Qwen/Qwen3.6-35B-A3B-FP8
+ vLLM version      : 0.26.0
+ Started at        : 2026-08-14T09:37:03.992487670Z
+ Load started at   : 2026-08-14T09:37:08.376Z
+ Ended at          : 2026-08-14T10:53:35.769218508Z
+ Generated at      : 2026-08-14T10:53:36.239968126Z
+
+ Load generator
+   Engine                    : штатная JMeter Thread Group + Constant Throughput Timer (all active threads in current thread group)
+   Threads (total)           : 5001  (сумма по ступеням; RPM / 60 x 300 s x 1.25 на ступень)
+   Dataset                   : 10 промптов, sha256 1d6d533769572a00...
+   Request                   : max_tokens=10000, ignore_eos=false, temperature=0.0, top_p=1.0, stream=false
+   E2E SLA threshold         : 360.0 s  (scoring.e2eSlaSec)
+
+ Metric names resolved from vLLM
+   generationTokens          : vllm:generation_tokens_total
+   itl                       : vllm:inter_token_latency_seconds
+   kvCacheUsage              : vllm:kv_cache_usage_perc
+   promptTokens              : vllm:prompt_tokens_total
+   queueWaiting              : vllm:num_requests_waiting
+   tpot                      : vllm:request_time_per_output_token_seconds
+   ttft                      : vllm:time_to_first_token_seconds
+
+ Aggregation
+   Histogram quantile        : p95
+   Sub-window                : 30 s  (влияет на p95 avg/max и на Throughput Max)
+   Scrape interval           : 5 s  (ограничивает Queue Max и KV Cache Max)
+
+--------------------------------------------------------------------------------
+ STAGE 1 — target 200 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-14T09:49:38.376Z .. 2026-08-14T09:59:38.376Z  (600 s)
+ Ramp              : 750 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 1250, такт 375.0 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 200.0 RPM   (target 200 RPM, +0.0 %)
+   Total Requests            : 2000
+   Successful                : 2000
+   Threads (peak observed)   : 1250 из 1250   ВНИМАНИЕ: заняты все потоки ступени, темп ограничен генератором
+   Errors                    : 0  (0.00 %)
+   E2E Latency Avg           : 102.71 s
+   E2E Latency p95           : 138.35 s
+   E2E Latency Min           : 44.07 s
+   E2E Latency Max           : 156.19 s   (истинный максимум, по отдельным наблюдениям)
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 0.0 %
+   KV Cache Max              : 0.0 %   (максимум среди снятых значений)
+   Queue Max                 : 0   (максимум среди снятых значений)
+   TTFT p95 (avg)            : недоступно   (подокно 30 s)
+   TTFT p95 (max)            : недоступно   (подокно 30 s)
+   TPOT p95 (avg)            : недоступно   (подокно 30 s)
+   TPOT p95 (max)            : недоступно   (подокно 30 s)
+   ITL p95 (avg)             : недоступно   (подокно 30 s)
+   ITL p95 (max)             : недоступно   (подокно 30 s)
+   Prompt Throughput Avg     : 0.0 tok/s
+   Prompt Throughput Max     : 0.0 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 0.0 tok/s
+   Generation Throughput Max : 0.0 tok/s   (подокно 30 s)
+
+ Score: 100 / 100
+   штрафов нет
+   Недоступные метрики (штраф не начислялся):
+     - TTFT p95 (avg)
+     - TPOT p95 (avg)
+     - TTFT p95 (max)
+     - TPOT p95 (max)
+     - ITL p95 (avg)
+     - ITL p95 (max)
+
+--------------------------------------------------------------------------------
+ STAGE 2 — target 250 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-14T10:12:09.376Z .. 2026-08-14T10:22:09.376Z  (600 s)
+ Ramp              : 751 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 1563, такт 375.1 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 249.9 RPM   (target 250 RPM, -0.0 %)
+   Total Requests            : 2499
+   Successful                : 2499
+   Threads (peak observed)   : 1563 из 1563   ВНИМАНИЕ: заняты все потоки ступени, темп ограничен генератором
+   Errors                    : 0  (0.00 %)
+   E2E Latency Avg           : 187.38 s
+   E2E Latency p95           : 245.47 s
+   E2E Latency Min           : 80.28 s
+   E2E Latency Max           : 279.84 s   (истинный максимум, по отдельным наблюдениям)
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 0.0 %
+   KV Cache Max              : 0.0 %   (максимум среди снятых значений)
+   Queue Max                 : 0   (максимум среди снятых значений)
+   TTFT p95 (avg)            : недоступно   (подокно 30 s)
+   TTFT p95 (max)            : недоступно   (подокно 30 s)
+   TPOT p95 (avg)            : недоступно   (подокно 30 s)
+   TPOT p95 (max)            : недоступно   (подокно 30 s)
+   ITL p95 (avg)             : недоступно   (подокно 30 s)
+   ITL p95 (max)             : недоступно   (подокно 30 s)
+   Prompt Throughput Avg     : 0.0 tok/s
+   Prompt Throughput Max     : 0.0 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 0.0 tok/s
+   Generation Throughput Max : 0.0 tok/s   (подокно 30 s)
+
+ Score: 100 / 100
+   штрафов нет
+   Недоступные метрики (штраф не начислялся):
+     - TTFT p95 (avg)
+     - TPOT p95 (avg)
+     - TTFT p95 (max)
+     - TPOT p95 (max)
+     - ITL p95 (avg)
+     - ITL p95 (max)
+
+--------------------------------------------------------------------------------
+ STAGE 3 — target 350 RPM
+--------------------------------------------------------------------------------
+ Hold window       : 2026-08-14T10:34:40.376Z .. 2026-08-14T10:44:40.376Z  (600 s)
+ Ramp              : 751 s   (кратен такту потока; в расчётах не участвует)
+ Threads           : 2188, такт 375.1 s   (ответ медленнее такта делает целевой RPM недостижимым)
+
+ Client — results.jtl, сырые наблюдения за окно удержания
+   Throughput                : 310.1 RPM   (target 350 RPM, -11.4 %)
+   Total Requests            : 3156
+   Successful                : 3101
+   Threads (peak observed)   : 2188 из 2188   ВНИМАНИЕ: заняты все потоки ступени, темп ограничен генератором
+   Errors                    : 55  (1.74 %)
+   E2E Latency Avg           : 476.63 s
+   E2E Latency p95           : 585.24 s
+   E2E Latency Min           : 267.73 s
+   E2E Latency Max           : 600.00 s   (истинный максимум, по отдельным наблюдениям)
+   Error reasons:
+     55 x Non HTTP response code: java.net.SocketTimeoutException Test failed: text expected to contain /"choices"/
+
+ Server — VictoriaMetrics, окно удержания
+   KV Cache Avg              : 0.0 %
+   KV Cache Max              : 0.0 %   (максимум среди снятых значений)
+   Queue Max                 : 0   (максимум среди снятых значений)
+   TTFT p95 (avg)            : недоступно   (подокно 30 s)
+   TTFT p95 (max)            : недоступно   (подокно 30 s)
+   TPOT p95 (avg)            : недоступно   (подокно 30 s)
+   TPOT p95 (max)            : недоступно   (подокно 30 s)
+   ITL p95 (avg)             : недоступно   (подокно 30 s)
+   ITL p95 (max)             : недоступно   (подокно 30 s)
+   Prompt Throughput Avg     : 0.0 tok/s
+   Prompt Throughput Max     : 0.0 tok/s   (подокно 30 s)
+   Generation Throughput Avg : 0.0 tok/s
+   Generation Throughput Max : 0.0 tok/s   (подокно 30 s)
+
+ Score: 30 / 100
+   -30  Фактический RPM 310.1 против целевых 350 (недобор 11.4 %)
+   -15  Ошибок 55 из 3156 (1.74 %)
+   -25  E2E p95 585.2 с при пороге 360.0 с
+   Недоступные метрики (штраф не начислялся):
+     - TTFT p95 (avg)
+     - TPOT p95 (avg)
+     - TTFT p95 (max)
+     - TPOT p95 (max)
+     - ITL p95 (avg)
+     - ITL p95 (max)
+
+--------------------------------------------------------------------------------
+ SUMMARY
+--------------------------------------------------------------------------------
+ Stage   Target RPM  Actual RPM   Errors     E2E p95  Queue Max   KV Max   Score
+ 1              200       200.0    0.00%      138.3s          0     0.0%     100
+ 2              250       249.9    0.00%      245.5s          0     0.0%     100
+ 3              350       310.1    1.74%      585.2s          0     0.0%      30
+
+--------------------------------------------------------------------------------
+ NOTES
+--------------------------------------------------------------------------------
+ - Все величины посчитаны только за окно удержания. Разгон не участвует нигде.
+ - С гистограмм снимается единственный квантиль p95. «p95 (max)» — худший наблюдённый участок
+   прогона, а не максимум отдельных наблюдений: последнего в бакетах не
+   существует. Значения зависят от подокна 30 s: на более коротком ряд шумнее
+   и его максимум выше. Разрешение p95 ограничено границами бакетов гистограммы.
+ - Queue Max и KV Cache Max — максимумы среди снятых значений. Всплеск короче
+   интервала скрейпа (5 s) в данных не существует.
+ - Throughput Max — максимум производной счётчика по подокну 30 s. На другом
+   подокне получится другое число, оба формально верны.
+ - TPOT и ITL — обе величины стадии decode, различаются способом усреднения:
+   TPOT взвешен по запросам, ITL — по токенам. Стадию prefill не отражает ни одна
+   из них, за неё отвечает TTFT.
+ - E2E Latency считается по успешным запросам: оборванный по таймауту запрос дал бы
+   не время отклика модели, а значение request.responseTimeoutSec.
+ - Пороги штрафов заданы константами Scoring и почти наверняка требуют настройки.
+   Пересчитать отчёт по уже собранным данным: LT_MODE=report LT_RUN_ID=<run>.
